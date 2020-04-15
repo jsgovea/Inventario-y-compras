@@ -4,8 +4,16 @@ import { rejects } from 'assert';
 
 export const resolvers = {
     Query: {
-        getCliente : ({id}) => {
-            return new Cliente(id, clientesDB[id])
+        getClientes : (root, {limite}) => {
+            return Clientes.find({}).limit(limite)
+        },
+        getCliente : (root, {id}) => {
+            return new Promise((resolve, object) => {
+                Clientes.findById(id, (error, cliente) => {
+                    if(error) rejects(error)
+                    else resolve(cliente)
+                });
+            });
         },
     }, 
     Mutation: {
@@ -31,7 +39,18 @@ export const resolvers = {
         },
         actualizarCliente: (root, {input}) => {
             return new Promise((resolve, object) => {
-                
+                Clientes.findOneAndUpdate({_id: input.id}, input, {new: false}, (error, cliente) => {
+                    if(error) rejects(error)
+                    else resolve(cliente)
+                })
+            })
+        },
+        eliminarCliente: (root, {id}) => {
+            return new Promise((resolve, object) => {
+                Clientes.findOneAndRemove({_id: id}, (error) => {
+                    if(error) rejects(error)
+                    else resolve("Usuario eliminado")
+                })
             })
         }
     }

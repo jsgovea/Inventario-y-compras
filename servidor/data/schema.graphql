@@ -25,6 +25,7 @@
         PREMIUM
     }
     type Query {
+        getClientes(limite: Int) : [Cliente]
         getCliente(id: ID) : Cliente
     }
     input EmailInput {
@@ -46,5 +47,7 @@
         #Nombre del resolver, input con datos y valor que retorna
         """Te permite crear nuevos clientes"""
         crearCliente(input: ClienteInput) : Cliente
+        """Editar clientes usando la misma informacion para crear"""
         actualizarCliente(input: ClienteInput) : Cliente
+        eliminarCliente(id: ID!) : String
     }
